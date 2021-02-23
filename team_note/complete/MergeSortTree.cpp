@@ -26,7 +26,7 @@ int n, m;
 struct MergesortTree {
 	vector<int> seg[mxn * 4 + 50];
 
-	void init(int l, int r, int node, vector<int>& arr) {
+	void init(vector<int>& arr, int l = 0, int r = n - 1, int node = 1) {
 		if (l == r) {
 			seg[node].push_back(arr[l]);
 			return;
@@ -34,7 +34,7 @@ struct MergesortTree {
 
 		int mid = (l + r) / 2;
 
-		init(l, mid, node * 2, arr); init(mid + 1, r, node * 2 + 1, arr);
+		init(arr, l, mid, node * 2); init(arr, mid + 1, r, node * 2 + 1);
 
 		auto &left = seg[node * 2], &right = seg[node * 2 + 1];
 
@@ -52,6 +52,7 @@ struct MergesortTree {
 		return query(val, l, r, node * 2, nodeLeft, mid) + query(val, l, r, node * 2 + 1, mid + 1, nodeRight);
 	}
 };
+
 
 
 int main() {
