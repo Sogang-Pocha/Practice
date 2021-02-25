@@ -22,52 +22,57 @@ const int mxn = 101010;
 const int lmxn = 21;
 int tc, cnt;
 int n, m;
-int par[mxn][lmxn];
-int visit[mxn], d[mxn];
+int parent[mxn][lmxn];
+int visit[mxn], depth[mxn];
 
 vector<int> adj[mxn];
 
-void dfs(int cur, int depth) {
+void dfs(int cur, int par) {
 	visit[cur] = true;
-	d[cur] = depth;
+	depth[cur] = depth[par] + 1;
 
-	for (int next : adj[cur]) {
+	for (auto next : adj[cur]) {
 		if (visit[next]) continue;
 
-		par[next][0] = cur;
-		dfs(next, depth + 1);
+		parent[next][0] = cur;
+		dfs(next, cur);
 	}
 }
 
 void make() {
-	for (int j = 1; j < lmxn; j++)
-		for (int i = 1; i <= n; i++)
-			par[i][j] = par[par[i][j - 1]][j - 1];
+	for (int j = 1; j < lmxn; j++) {
+		for (int i = 1; i <= n; i++) {
+			parent[i][j] = parent[parent[i][j - 1]][j - 1];
+		}
+	}	
 }
 
 int lca(int x, int y) {
-	if (d[x] > d[y]) swap(x, y);
+	if (depth[x] > depth[y]) swap(x, y);
 
-	for (int i = 20; i >= 0; i--)
-		if (d[y] - d[x] >= (1 << i))
-			y = par[y][i];
+	for (int i = lmxn - 1; i >= 0; i--) {
+		if (depth[y] - depth[x] >= (1 << i)) {
+			y = parent[y][i];
+		}
+	}
 
 	if (x == y) return x;
 
-	for (int i = 20; i >= 0; i--) {
-		if (par[x][i] != par[y][i]) {
-			x = par[x][i];
-			y = par[y][i];
+	for (int i = lmxn - 1; i >= 0; i--) {
+		if (parent[x][i] != parent[y][i]) {
+			x = parent[x][i];
+			y = parent[y][i];
 		}
 	}
-	return par[x][0];
+	return parent[x][0];
 }
 
 int main() {
-#ifndef ONLINE_JUDGE
-	freopen("input.txt", "r", stdin);
-#endif
 	ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+
+	cin >> n >> m;
+
+
 
 	return 0;
 }
