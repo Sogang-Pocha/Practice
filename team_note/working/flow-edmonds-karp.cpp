@@ -54,8 +54,6 @@ struct flow {
 		sink = end;
 		for (int i = 0; i < e; i++) {
 			cin >> from >> to >> cost;
-			//cin >> from >> to;
-			//cost = 1;
 			add_edge(from, to, cost, directed);
 		}
 	}
